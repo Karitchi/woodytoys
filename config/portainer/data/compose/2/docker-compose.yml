@@ -1,0 +1,80 @@
+version: '3'
+services:
+# ---
+  hangar:
+    container_name: hangar
+    image: client
+    restart: unless-stopped
+    dns:
+      - 10.0.0.2
+    networks:
+      ipvlan-l3:
+        ipv4_address: 10.0.1.2
+# ---
+  production:
+    container_name: production
+    image: client
+    restart: unless-stopped
+    dns:
+      - 10.0.0.2
+    networks:
+      ipvlan-l3:
+        ipv4_address: 10.0.2.2
+# ---
+  accounting:
+    container_name: accounting
+    image: client
+    restart: unless-stopped
+    dns:
+      - 10.0.0.2
+    networks:
+      ipvlan-l3:
+        ipv4_address: 10.0.3.2
+# ---
+  marketing:
+    container_name: marketing
+    image: client
+    restart: unless-stopped
+    dns:
+      - 10.0.0.2
+    networks:
+      ipvlan-l3:
+        ipv4_address: 10.0.4.2
+# ---
+  secretariat:
+    container_name: secretariat
+    image: client
+    restart: unless-stopped
+    dns:
+      - 10.0.0.2
+    networks:
+      ipvlan-l3:
+        ipv4_address: 10.0.5.2
+# ---
+  management:
+    container_name: management
+    image: client
+    restart: unless-stopped
+    dns:
+      - 10.0.0.2
+    networks:
+      ipvlan-l3:
+        ipv4_address: 10.0.6.2
+# ---
+networks:
+  ipvlan-l3:
+    name: ipvlan-l3
+    driver: ipvlan
+    driver_opts:
+      parent: ens33
+      ipvlan_mode: l3
+    ipam:
+      config:
+        - subnet: 10.0.0.0/24
+        - subnet: 10.0.1.0/24
+        - subnet: 10.0.2.0/24
+        - subnet: 10.0.3.0/24
+        - subnet: 10.0.4.0/24
+        - subnet: 10.0.5.0/24
+        - subnet: 10.0.6.0/24
+        - subnet: 10.0.7.0/24
