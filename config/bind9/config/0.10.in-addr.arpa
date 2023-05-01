@@ -1,0 +1,19 @@
+$TTL 2d
+$ORIGIN 0.10.in-addr.arpa.
+
+@       IN      SOA     ns.intra.m1-4.ephec-ti.be.      karichikarichikarichi.gmail.com (
+                        210323  ; serial
+                        12h     ; refresh
+                        15m     ; retry
+                        3w      ; expire
+                        2h      ; minimum ttl
+                        )
+
+        IN      NS      ns.intra.m1-4.ephec-ti.be.
+
+ns      IN      A       10.10.10.10
+
+
+3.0     IN      PTR       erp.intra.m1-4.ephec-ti.be.
+4.0     IN      PTR       b2b.intra.m1-4.ephec-ti.be.
+5.0     IN      PTR       www.intra.m1-4.ephec-ti.be.
