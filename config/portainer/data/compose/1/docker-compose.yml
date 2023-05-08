@@ -3,14 +3,15 @@ services:
 # ---
   bind9:
     image: ubuntu/bind9:9.18-22.04_beta
-    container_name: bind9
+    container_name: ns
     environment:
       - TZ=Europe/Brussels
       - BIND9_USER=root
     volumes:
-      - /home/nicolas/config/bind9/config:/etc/bind
-      - /home/nicolas/config/bind9/cache:/var/cache/bind
-      - /home/nicolas/config/bind9/records:/var/lib/bind
+      - /home/habibou/woodytoys/config/bind9/config/named.conf:/etc/bind/named.conf
+      - /home/habibou/woodytoys/config/bind9/config/woodytoys-home.zone:/etc/bind/woodytoys-home.zone
+      - /home/habibou/woodytoys/config/bind9/cache:/var/cache/bind
+      - /home/habibou/woodytoys/config/bind9/records:/var/lib/bind
     networks:
       ipvlan-l3:
         ipv4_address: 10.0.0.2
@@ -23,7 +24,7 @@ services:
       ipvlan-l3:
         ipv4_address: 10.0.0.3
     volumes:
-    - /home/nicolas/config/www/htdocs:/usr/local/apache2/htdocs
+    - /home/habibou/woodytoys/config/www/htdocs:/usr/local/apache2/htdocs
     restart: unless-stopped
 # ---
   b2b:
@@ -32,7 +33,7 @@ services:
     depends_on:
     - mysql
     volumes:
-    - /home/nicolas/config/b2b/html:/var/www/html/
+    - /home/habibou/woodytoys/config/b2b/html:/var/www/html/
     ports:
     - 8000:80
     networks:
@@ -46,7 +47,7 @@ services:
       depends_on:
           - mysql
       volumes:
-          - /home/nicolas/config/erp/html:/var/www/html/
+          - /home/habibou/woodytoys/config/erp/html:/var/www/html/
       ports:
           - 8001:80
       networks:
@@ -59,7 +60,7 @@ services:
       image: mysql
       restart: unless-stopped
       volumes:
-        - /home/nicolas/config/mysql:/var/lib/mysql
+        - /home/habibou/woodytoys/config/mysql:/var/lib/mysql
       environment:
           MYSQL_ROOT_PASSWORD: MYSQL_ROOT_PASSWORD
           MYSQL_DATABASE: MYSQL_DATABASE
@@ -70,6 +71,32 @@ services:
       networks:
         ipvlan-l3:
           ipv4_address: 10.0.0.6
+# ---
+  postfix:
+      container_name: mail
+      image: postfix
+      restart: unless-stopped
+      volumes:
+        - /home/habibou/woodytoys/config/mail/postfix/main.cf:/etc/postfix/main.cf
+      ports:
+          - 25:25
+          - 587:587
+      networks:
+        ipvlan-l3:
+          ipv4_address: 10.0.0.7
+# ---
+  dovecot:
+      container_name: dovecot
+      image: dovecot
+      restart: unless-stopped
+      volumes:
+        - /home/habibou/woodytoys/config/mail/dovecot/dovecot.conf:/etc/dovecot/dovecot.conf
+      ports:
+          - 143:143
+          - 993:993
+      networks:
+        ipvlan-l3:
+          ipv4_address: 10.0.0.8
 # ---
 networks:
   ipvlan-l3:
